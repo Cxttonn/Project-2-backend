@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active:
+      - db
+  application:
+    name: 331-backend
+  datasource:
+    url: jdbc:mysql://localhost:3307/selabdb1?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&useUnicode=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+  jpa:
+    hibernate:
+#      ddl-auto: update
+      ddl-auto: create
+  hibernate:
+      properties:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
+application:
+  security:
+    jwt:
+      secret-key: 0a250bd12f146227caf4412e9b272c0bbf5c542dc2c446615f19c381e622342edc15b98d4fe1339d54e1b63273de8051dc863978ec7a73176e608957b66698eac65daef7bb4ad86e5ad064f4947d91186719072921c59db421ac6c851501ee090331e19b89841c95e74d4e5c6ca8d0fee5fb4e606afdbe771527ac389b31e45bbce482392cd5b5219950650f27b24eafcec36a18c9fccaa84b2cc0e1b0997f9c945252194b1e564ff922599efdf20a4ee378af3ed5d8eba623b3d45740e5f24e510ad6055c552d5294da1a5618ae40bc256bab9bfeabfd2e95b5d2f4a51d5279d8894d06f6ef6f4e808ee60a40e57315444859e661fe6776a6b8faef020561e6
+      expiration: 86400000 # 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+server:
+          port: 8083
