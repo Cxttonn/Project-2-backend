@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class EventController1 {
+@RequestMapping("/api/countries")
+public class CountryController {
 
     @Autowired
-    private EventService1 eventService;
+    private CountryService countryService;
 
-    @GetMapping("/events")
-    public List<Event2> getAllEvents() {
-        return eventService.getAllEvents();
+    @GetMapping
+    public List<Country> getAllCountries() {
+        return countryService.getAllCountries();
     }
-
-    @GetMapping("/events/{id}")
-    public Event2 getEventById(@PathVariable String id) {
-        return eventService.getEventById(id);
+    @GetMapping("/{id}")
+    public Country getCountryById(@PathVariable String id) {
+        return countryService.getCountries(id);
     }
 }

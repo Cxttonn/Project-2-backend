@@ -35,7 +35,7 @@ public class EventService1 {
             Event2[] eventsFromSource = restTemplate.getForObject(url, Event2[].class);
             if (eventsFromSource != null) {
                 for (Event2 event : eventsFromSource) {
-                    // Calculate gold, silver, bronze, and total medals
+
                     if (event.getMedalsBySport() != null && event.getMedalsBySport().getUntil2024() != null) {
                         Event2.MedalTotals totals = event.getMedalsBySport().getUntil2024().getTotal();
                         if (totals != null) {
@@ -44,7 +44,7 @@ public class EventService1 {
                             event.setBronzeMedals(totals.getBronze());
                         }
                     }
-                    // Set total medals based on individual medal counts
+
                     event.setTotalMedals(event.getGoldMedals() + event.getSilverMedals() + event.getBronzeMedals());
                     events.add(event);
                 }
@@ -56,18 +56,18 @@ public class EventService1 {
     public void saveAllEvents() {
         List<Event2> events = getAllEvents();
 
-        // Print events for debugging
+
         System.out.println("Saving the following events to the database:");
         for (Event2 event : events) {
             System.out.println(event.getId() + ": " + event.getName() + " | Gold: " + event.getGoldMedals() + " | Silver: " + event.getSilverMedals() + " | Bronze: " + event.getBronzeMedals());
         }
 
-        eventRepository.saveAll(events); // Save all events to the database
+        eventRepository.saveAll(events);
     }
 
     @PostConstruct
     public void init() {
-        saveAllEvents(); // Load events when the application starts
+        saveAllEvents();
     }
 
     public Event2 getEventById(String id) {

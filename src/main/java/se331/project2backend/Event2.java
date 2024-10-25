@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "events") // Ensure the table name matches your MySQL table
+@Table(name = "events")
 public class Event2 {
     @Id
     private String id;
@@ -31,8 +31,6 @@ public class Event2 {
     @Embedded
     @JsonProperty("medals_by_sport")
     private MedalsBySport medalsBySport;
-
-    // Getters and Setters...
 
     public String getId() {
         return id;
@@ -98,7 +96,7 @@ public class Event2 {
         this.medalsBySport = medalsBySport;
     }
 
-    // Inner class for medals by sport
+
     @Embeddable
     public static class MedalsBySport {
         @Embedded
@@ -114,7 +112,7 @@ public class Event2 {
         }
     }
 
-    // Inner class for until 2024
+
     @Embeddable
     public static class Until2024 {
         @ElementCollection
@@ -140,7 +138,7 @@ public class Event2 {
         }
     }
 
-    // Inner class for medal totals
+
     @Embeddable
     public static class MedalTotals {
         private int gold;
@@ -172,7 +170,7 @@ public class Event2 {
         }
     }
 
-    // Inner class for sports
+
     @Embeddable
     public static class Sport {
         private String name;

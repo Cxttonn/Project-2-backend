@@ -14,7 +14,6 @@ public class Sport {
     private int silver;
     private int bronze;
 
-    // Constructors, Getters, and Setters...
 
     public Sport() {}
 
