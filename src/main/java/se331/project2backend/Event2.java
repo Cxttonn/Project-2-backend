@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "events") // Ensure the table name matches your MySQL table
 public class Event2 {
     @Id
     private String id;
 
     private String name;
-    private String continent;
 
     @JsonProperty("flag_url")
     private String flagUrl;
@@ -19,11 +19,21 @@ public class Event2 {
     @JsonProperty("total_medals")
     private int totalMedals;
 
+    @JsonProperty("gold_medals")
+    private int goldMedals;
+
+    @JsonProperty("silver_medals")
+    private int silverMedals;
+
+    @JsonProperty("bronze_medals")
+    private int bronzeMedals;
+
     @Embedded
     @JsonProperty("medals_by_sport")
     private MedalsBySport medalsBySport;
 
-    // Getters and Setters
+    // Getters and Setters...
+
     public String getId() {
         return id;
     }
@@ -38,14 +48,6 @@ public class Event2 {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getContinent() {
-        return continent;
-    }
-
-    public void setContinent(String continent) {
-        this.continent = continent;
     }
 
     public String getFlagUrl() {
@@ -64,6 +66,30 @@ public class Event2 {
         this.totalMedals = totalMedals;
     }
 
+    public int getGoldMedals() {
+        return goldMedals;
+    }
+
+    public void setGoldMedals(int goldMedals) {
+        this.goldMedals = goldMedals;
+    }
+
+    public int getSilverMedals() {
+        return silverMedals;
+    }
+
+    public void setSilverMedals(int silverMedals) {
+        this.silverMedals = silverMedals;
+    }
+
+    public int getBronzeMedals() {
+        return bronzeMedals;
+    }
+
+    public void setBronzeMedals(int bronzeMedals) {
+        this.bronzeMedals = bronzeMedals;
+    }
+
     public MedalsBySport getMedalsBySport() {
         return medalsBySport;
     }
@@ -75,6 +101,8 @@ public class Event2 {
     // Inner class for medals by sport
     @Embeddable
     public static class MedalsBySport {
+        @Embedded
+        @JsonProperty("until_2024")
         private Until2024 until2024;
 
         public Until2024 getUntil2024() {
@@ -84,10 +112,31 @@ public class Event2 {
         public void setUntil2024(Until2024 until2024) {
             this.until2024 = until2024;
         }
+    }
 
-        // Method to get totals
+    // Inner class for until 2024
+    @Embeddable
+    public static class Until2024 {
+        @ElementCollection
+        private List<Sport> sports;
+
+        @Embedded
+        private MedalTotals total;
+
+        public List<Sport> getSports() {
+            return sports;
+        }
+
+        public void setSports(List<Sport> sports) {
+            this.sports = sports;
+        }
+
         public MedalTotals getTotal() {
-            return (until2024 != null) ? until2024.getTotal() : null;
+            return total;
+        }
+
+        public void setTotal(MedalTotals total) {
+            this.total = total;
         }
     }
 
@@ -123,17 +172,44 @@ public class Event2 {
         }
     }
 
-    // Inner class for until 2024
+    // Inner class for sports
     @Embeddable
-    public static class Until2024 {
-        private MedalTotals total;
+    public static class Sport {
+        private String name;
+        private int gold;
+        private int silver;
+        private int bronze;
 
-        public MedalTotals getTotal() {
-            return total;
+        public String getName() {
+            return name;
         }
 
-        public void setTotal(MedalTotals total) {
-            this.total = total;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getGold() {
+            return gold;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+
+        public int getSilver() {
+            return silver;
+        }
+
+        public void setSilver(int silver) {
+            this.silver = silver;
+        }
+
+        public int getBronze() {
+            return bronze;
+        }
+
+        public void setBronze(int bronze) {
+            this.bronze = bronze;
         }
     }
 }
