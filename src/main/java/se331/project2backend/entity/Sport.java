@@ -1,4 +1,4 @@
-package se331.project2backend;
+package se331.project2backend.entity;
 
 import jakarta.persistence.*;
 

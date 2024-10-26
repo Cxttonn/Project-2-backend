@@ -1,4 +1,4 @@
-package se331.project2backend;
+package se331.project2backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;

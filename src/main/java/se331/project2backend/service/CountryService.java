@@ -1,8 +1,10 @@
-package se331.project2backend;
+package se331.project2backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import se331.project2backend.repository.CountryRepository;
+import se331.project2backend.entity.Country;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;

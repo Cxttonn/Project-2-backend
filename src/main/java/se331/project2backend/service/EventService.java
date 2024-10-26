@@ -1,18 +1,20 @@
-package se331.project2backend;
+package se331.project2backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import se331.project2backend.repository.EventRepository;
+import se331.project2backend.entity.Event;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EventService1 {
+public class EventService {
 
     @Autowired
-    private EventRepository1 eventRepository;
+    private EventRepository eventRepository;
 
     private static final String[] SOURCES = {
             "https://my-json-server.typicode.com/Jasmxnej/countrymedal/data1",
@@ -29,15 +31,15 @@ public class EventService1 {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<Event2> getAllEvents() {
-        List<Event2> events = new ArrayList<>();
+    public List<Event> getAllEvents() {
+        List<Event> events = new ArrayList<>();
         for (String url : SOURCES) {
-            Event2[] eventsFromSource = restTemplate.getForObject(url, Event2[].class);
+            Event[] eventsFromSource = restTemplate.getForObject(url, Event[].class);
             if (eventsFromSource != null) {
-                for (Event2 event : eventsFromSource) {
+                for (Event event : eventsFromSource) {
 
                     if (event.getMedalsBySport() != null && event.getMedalsBySport().getUntil2024() != null) {
-                        Event2.MedalTotals totals = event.getMedalsBySport().getUntil2024().getTotal();
+                        Event.MedalTotals totals = event.getMedalsBySport().getUntil2024().getTotal();
                         if (totals != null) {
                             event.setGoldMedals(totals.getGold());
                             event.setSilverMedals(totals.getSilver());
@@ -54,11 +56,11 @@ public class EventService1 {
     }
 
     public void saveAllEvents() {
-        List<Event2> events = getAllEvents();
+        List<Event> events = getAllEvents();
 
 
         System.out.println("Saving the following events to the database:");
-        for (Event2 event : events) {
+        for (Event event : events) {
             System.out.println(event.getId() + ": " + event.getName() + " | Gold: " + event.getGoldMedals() + " | Silver: " + event.getSilverMedals() + " | Bronze: " + event.getBronzeMedals());
         }
 
@@ -70,7 +72,7 @@ public class EventService1 {
         saveAllEvents();
     }
 
-    public Event2 getEventById(String id) {
+    public Event getEventById(String id) {
         return eventRepository.findById(id).orElse(null);
     }
 }

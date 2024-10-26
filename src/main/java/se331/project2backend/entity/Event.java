@@ -1,4 +1,4 @@
-package se331.project2backend;
+package se331.project2backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "events")
-public class Event2 {
+public class Event {
     @Id
     private String id;
 
