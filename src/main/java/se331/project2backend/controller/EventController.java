@@ -1,10 +1,9 @@
 package se331.project2backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 import se331.project2backend.entity.Event;
 import se331.project2backend.service.EventService;
 
@@ -26,4 +25,14 @@ public class EventController {
     public Event getEventById(@PathVariable String id) {
         return eventService.getEventById(id);
     }
+
+    @GetMapping("/events/search/{keyword}")
+    public Page<Event> searchByKeyword(
+            @PathVariable String keyword,
+            @RequestParam int page,
+            @RequestParam int size) {
+        return eventService.getByName(keyword, PageRequest.of(page - 1, size));
+    }
 }
+
+

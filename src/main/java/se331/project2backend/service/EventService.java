@@ -1,6 +1,8 @@
 package se331.project2backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import se331.project2backend.repository.EventRepository;
@@ -15,7 +17,8 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
-
+    public Page<Event> getByName(String name, Pageable pageable) {
+        return eventRepository.findByNameContaining(name, pageable);    }
     private static final String[] SOURCES = {
             "https://my-json-server.typicode.com/Jasmxnej/countrymedal/data1",
             "https://my-json-server.typicode.com/Jasmxnej/data2/data2",
@@ -76,3 +79,6 @@ public class EventService {
         return eventRepository.findById(id).orElse(null);
     }
 }
+
+
+
