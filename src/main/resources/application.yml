@@ -29,21 +29,50 @@
 #server:
 #          port: 8080
 
+#spring:
+#  profiles:
+#    active: db
+#  application:
+#    name: Project-2-backend
+#  datasource:
+#    url: jdbc:mysql://localhost:3307/selabdb2?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: password
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate.dialect: org.hibernate.dialect.MySQLDialect
+#server:
+#  port: 8084
+
 spring:
   profiles:
-    active: db
+    active:
+      - db
   application:
-    name: Project-2-backend
+    name: 331-backend
   datasource:
-    url: jdbc:mysql://localhost:3307/selabdb2?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3307/selabdb2?createDatabaseIfNotExist=true&autoReconnect=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&useUnicode=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: password
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+  hibernate:
     properties:
-      hibernate.dialect: org.hibernate.dialect.MySQLDialect
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
+application:
+  security:
+    jwt:
+      secret-key: 56f1bd09b5a99508e7031ee0430b1e983c4bc21ed76527a54023da747e3cea850acd57b6116ab6942c8925e19f976476d63e3531968eb8ce23cf0f0e14bb78f1dc15b61f4ab5d82144e9de1935a2229f18af154ca2392476c410be7f2f486996332ca3e756ee1ae8c57ddc4a5870b8637f17d2ae4e4c0612b4d8860036257ca0a705e6b696268a0b8208d68d7653d96d2b72f66b4e5586b84c8bf17d847faad5a951982fb067243fc4ccddb49f2c624f9a7c4082ad15eb177c3a4994d3649d2a806a26e6cf7c5975607f0922ccf2d48aa2a1db979f8d53593b98584f0e5e38a2cc939feac5d6bf3dbf434cf787056070558ce7f6d6beac774c6127608247b66e
+      expiration: 86400000 # 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
 server:
   port: 8084
-
