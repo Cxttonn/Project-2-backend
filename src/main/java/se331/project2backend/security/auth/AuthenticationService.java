@@ -1,6 +1,5 @@
 package se331.project2backend.security.auth;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,10 +15,12 @@ import se331.project2backend.security.token.TokenRepository;
 import se331.project2backend.security.token.TokenType;
 import se331.project2backend.security.user.Role;
 import se331.project2backend.security.user.User;
+import se331.project2backend.security.user.UserDTO;
 import se331.project2backend.security.user.UserRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class AuthenticationService {
     User user = User.builder()
             .firstname(request.getFirstname())
             .lastname(request.getLastname())
-            .username(request.getFirstname())
+            .username(request.getFirstname()) // Set username as firstname
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .roles(List.of(Role.ROLE_USER))
@@ -44,9 +45,10 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+
+            .build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -57,16 +59,24 @@ public class AuthenticationService {
             )
     );
     User user = repository.findByUsername(request.getUsername())
-            .orElseThrow();
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
     String jwtToken = jwtService.generateToken(user);
     String refreshToken = jwtService.generateRefreshToken(user);
-//    revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
+
+    UserDTO userDTO = new UserDTO();
+    userDTO.setId(user.getId());
+    userDTO.setFirstname(user.getFirstname());
+    userDTO.setLastname(user.getLastname());
+    userDTO.setUsername(user.getUsername());
+    userDTO.setEmail(user.getEmail());
+    userDTO.setRoles(user.getRoles().stream().map(Role::name).collect(Collectors.toList()));
+
     return AuthenticationResponse.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
-//            .user(LabMapper.INSTANCE.getOrganizerAuthDTO(user.getOrganizer()))
+            .user(userDTO)
             .build();
   }
 
@@ -99,7 +109,7 @@ public class AuthenticationService {
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
     final String refreshToken;
     final String userEmail;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       return;
     }
     refreshToken = authHeader.substring(7);
@@ -114,6 +124,7 @@ public class AuthenticationService {
         AuthenticationResponse authResponse = AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+
                 .build();
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }

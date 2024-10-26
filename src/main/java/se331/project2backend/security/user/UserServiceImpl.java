@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @Slf4j
@@ -22,5 +24,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.findAllUsers();
+    }
+
+    @Override
+    public User getUserById(Integer id) {
+        return userDao.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

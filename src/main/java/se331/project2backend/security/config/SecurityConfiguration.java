@@ -138,6 +138,7 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.POST, "/api/v1/auth/authenticate").permitAll()
                             .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

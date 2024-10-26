@@ -1,5 +1,6 @@
 package se331.project2backend.security.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class User implements UserDetails {
   @Column(unique = true)
   private String username;
   private String email;
+  @JsonIgnore
   private String password;
 //  private Boolean enabled;
 

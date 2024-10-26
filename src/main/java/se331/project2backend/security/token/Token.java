@@ -1,12 +1,12 @@
 package se331.project2backend.security.token;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import se331.project2backend.security.user.User;
-
 
 @Data
 @Builder
@@ -32,5 +32,6 @@ public class Token {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
+  @JsonIgnore
   public User user;
 }
