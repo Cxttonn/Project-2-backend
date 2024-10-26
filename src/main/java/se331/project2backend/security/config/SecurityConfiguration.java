@@ -21,27 +21,129 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+//    private final JwtAuthenticationFilter jwtAuthFilter;
+//    private final AuthenticationProvider authenticationProvider;
+//    private final LogoutHandler logoutHandler;
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
+//        http.headers((headers) -> headers.frameOptions().disable())
+//                .csrf().disable()
+//                .cors() // Ensure this is before authorizeHttpRequests
+//                .and()
+//                .authorizeHttpRequests((authorize) -> {
+//                    authorize.requestMatchers("/api/v1/auth/**").permitAll()
+//                            .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+//                            .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
+//                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                            .anyRequest().authenticated();
+//                })
+//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+//                .logout((logout) -> {
+//                    logout.logoutUrl("/api/v1/auth/logout");
+//                    logout.addLogoutHandler(logoutHandler);
+//                    logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+//                });
+//
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost:5173");  // Frontend origin
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        config.addExposedHeader("Authorization");
+//        config.addExposedHeader("Content-Type");
+//        config.addExposedHeader("x-total-count");
+//
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
+//}
+
+
+//    private final JwtAuthenticationFilter jwtAuthFilter;
+//    private final AuthenticationProvider authenticationProvider;
+//    private final LogoutHandler logoutHandler;
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.headers((headers) -> headers.frameOptions().disable())
+//                .csrf().disable()
+//                .cors() // Ensure this is before authorizeHttpRequests
+//                .and()
+//                .authorizeHttpRequests((authorize) -> {
+//                    authorize.requestMatchers("/api/v1/auth/**").permitAll()
+//                            .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+//                            .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
+//                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                            // Add admin user management endpoints
+//                            .requestMatchers("/api/v1/users/**").hasRole("ADMIN") // Only admins can access
+//                            .anyRequest().authenticated();
+//                })
+//                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+//                .logout((logout) -> {
+//                    logout.logoutUrl("/api/v1/auth/logout");
+//                    logout.addLogoutHandler(logoutHandler);
+//                    logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+//                });
+//
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost:5173");  // Frontend origin
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        config.addExposedHeader("Authorization");
+//        config.addExposedHeader("Content-Type");
+//        config.addExposedHeader("x-total-count");
+//
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
+//}
+
+//
+
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.headers((headers) -> headers.frameOptions().disable())
+        http.headers(headers -> headers.frameOptions().disable())
                 .csrf().disable()
-                .cors() // Ensure this is before authorizeHttpRequests
+                .cors()
                 .and()
-                .authorizeHttpRequests((authorize) -> {
+                .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/api/v1/auth/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll() // Ensure correct path
+                            .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/v1/auth/authenticate").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .anyRequest().authenticated();
                 })
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout((logout) -> {
+                .logout(logout -> {
                     logout.logoutUrl("/api/v1/auth/logout");
                     logout.addLogoutHandler(logoutHandler);
                     logout.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
@@ -50,13 +152,31 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    //    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost:5173");  // Frontend origin
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        config.addExposedHeader("Authorization");
+//        config.addExposedHeader("Content-Type");
+//        config.addExposedHeader("Config");
+//        config.addExposedHeader("x-total-count");
+//
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
+//}
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");  // Frontend origin
+        config.addAllowedOrigin("http://localhost:5173");  // Your frontend origin
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("Authorization");
