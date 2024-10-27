@@ -23,10 +23,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAllUsers() {
-        return userRepository.findAll();  // Fetch all users
+        return userRepository.findAll();
     }
     @Override
     public Optional<User> findById(Integer id) {
-        return userRepository.findById(id);  // Fetch user by ID
+        return userRepository.findById(id);
     }
 }
