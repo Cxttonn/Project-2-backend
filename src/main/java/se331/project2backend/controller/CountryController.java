@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/countries")
-public class CountryController1 {
+public class CountryController {
 
     @Autowired
     private CountryService countryService;

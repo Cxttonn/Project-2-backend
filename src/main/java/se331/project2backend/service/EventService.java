@@ -78,6 +78,9 @@ public class EventService {
     public Event getEventById(String id) {
         return eventRepository.findById(id).orElse(null);
     }
+
+    public Event updateEvent(Event event) {return eventRepository.save(event);}
+
 }
 
 
