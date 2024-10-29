@@ -1,5 +1,6 @@
 package se331.project2backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -27,6 +28,11 @@ public class Event {
 
     @JsonProperty("bronze_medals")
     private int bronzeMedals;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @Embedded
     @JsonProperty("medals_by_sport")
@@ -88,6 +94,14 @@ public class Event {
         this.bronzeMedals = bronzeMedals;
     }
 
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
     public MedalsBySport getMedalsBySport() {
         return medalsBySport;
     }
@@ -96,6 +110,7 @@ public class Event {
         this.medalsBySport = medalsBySport;
     }
 
+    // Nested classes
 
     @Embeddable
     public static class MedalsBySport {
@@ -111,7 +126,6 @@ public class Event {
             this.until2024 = until2024;
         }
     }
-
 
     @Embeddable
     public static class Until2024 {
@@ -137,7 +151,6 @@ public class Event {
             this.total = total;
         }
     }
-
 
     @Embeddable
     public static class MedalTotals {
@@ -169,7 +182,6 @@ public class Event {
             this.bronze = bronze;
         }
     }
-
 
     @Embeddable
     public static class Sport {

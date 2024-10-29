@@ -206,6 +206,7 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/api/v1/auth/authenticate").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/countries/add-with-events").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.POST, "/events").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.POST, "/api/v1/update-sports").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

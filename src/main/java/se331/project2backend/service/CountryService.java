@@ -3,6 +3,7 @@ package se331.project2backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import se331.project2backend.entity.Event;
 import se331.project2backend.repository.CountryRepository;
 import se331.project2backend.entity.Country;
 
@@ -15,6 +16,7 @@ public class CountryService {
 
     @Autowired
     private CountryRepository countryRepository;
+
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -93,5 +95,39 @@ public class CountryService {
 
     public Country getCountries(String id) {
         return countryRepository.findById(id).orElse(null);
+    }
+
+
+    public Country addCountryWithEvents(Country country) {
+        List<Event> events = country.getEvents();
+
+        for (Event event : events) {
+            event.setCountry(country);
+
+            if (event.getMedalsBySport() == null) {
+                event.setMedalsBySport(new Event.MedalsBySport());
+            }
+
+            if (event.getMedalsBySport().getUntil2024() == null) {
+                event.getMedalsBySport().setUntil2024(new Event.Until2024());
+            }
+
+            if (event.getMedalsBySport().getUntil2024().getSports() == null) {
+                event.getMedalsBySport().getUntil2024().setSports(new ArrayList<>());
+            }
+
+        }
+
+        country.setEvents(events);
+        return countryRepository.save(country);
+    }
+
+
+    public boolean deleteCountryById(String id) {
+        if (countryRepository.existsById(id)) {
+            countryRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

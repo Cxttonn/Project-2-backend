@@ -61,11 +61,10 @@ public class EventService {
     public void saveAllEvents() {
         List<Event> events = getAllEvents();
 
-
-        System.out.println("Saving the following events to the database:");
-        for (Event event : events) {
-            System.out.println(event.getId() + ": " + event.getName() + " | Gold: " + event.getGoldMedals() + " | Silver: " + event.getSilverMedals() + " | Bronze: " + event.getBronzeMedals());
-        }
+//        System.out.println("Saving the following events to the database:");
+//        for (Event event : events) {
+//            System.out.println(event.getId() + ": " + event.getName() + " | Gold: " + event.getGoldMedals() + " | Silver: " + event.getSilverMedals() + " | Bronze: " + event.getBronzeMedals());
+//        }
 
         eventRepository.saveAll(events);
     }
@@ -81,7 +80,8 @@ public class EventService {
 
     public Event updateEvent(Event event) {return eventRepository.save(event);}
 
+    public List<Event> fetchAllEventsFromDB() {
+        return eventRepository.findAll();
+    }
 }
-
-
 
